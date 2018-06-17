@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add passengers</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/add_passengers.css" %}">
+    <meta charset="UTF-8">
+</head>
+<body onload="checkLog()">
+    <script>
+        function checkLog() {
+            if (sessionStorage.getItem('username') != null && sessionStorage.getItem('password') != null){
+                //redirect to page
+
+            }
+            else{
+                alert("You need to be logged in");
+                setTimeout(location.href = '../../2login2/{{ flight }}.html' , 500);
+                //show validation message
+            }
+        }
+    </script>
+    <h1 class="abc">Zakup bilety na wybrany lot</h1>
+    {% if message2 %}
+        {{ message2 }}
+    {% endif %}
+    <form action="/add_passengers/{{ flight }}/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Wybierz" />
+    </form>
+    {% if message %}
+        {{ message2 }}
+    {% endif %}
+</body>
+</html>

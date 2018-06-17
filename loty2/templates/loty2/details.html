@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/details.css" %}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    {% if flight %}
+    <b>Loty</b><br>
+    <ul>
+        <li>Numer lotu: {{ flight.flight_number}}</li>
+        <li>Numer samolotu: {{ flight.plane}}</li>
+        <li>Liczba sprzedanych biletów: {{ flight.tickets_sold}}</li>
+        <li>Lotnisko odlotu: {{ flight.departure_airport}}</li>
+        <li>Lotnisko przylotu: {{ flight.arrival_airport}}</li>
+        <li>Data odlotu: {{ flight.date_of_departure}}</li>
+        <li>Data przylotu: {{ flight.date_of_arrival }}</li>
+    </ul>
+    <h2><b><u>Lista pasażerów</u></b></h2>
+    <table>
+        <thead>
+            <tr>
+            <th>Pasażer</th>
+            <th>Bilety</th>
+            </tr>
+        </thead>
+        {% for booking in bookings_list %}
+            <tr>
+                <th>{{ booking.passenger }}</th>
+                <th>{{ booking.number_of_tickets }}</th>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="/add_passengers/{{ flight.flight_number }}">Dodaj pasazerow do lotu</a>
+{% else %}
+    <p>There is no such flight matching the query</p>
+{% endif %}
+</body>
+</html>

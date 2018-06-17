@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/add_passengers.css" %}">
+	<!-- jQuery CDN -->
+    {% load static %}
+	<script src="{% static "jquery-3.3.1.js" %}"></script>
+
+	<style type="text/css">
+		/*Float the form labels to the left and allow them 40% of the width of the form*/
+		label {
+			clear:both;
+			float: left;
+			width:40%;
+		}
+		/*Float the form inputs to the right and allow them 50% of the width of the form*/
+		input {
+			float: right;
+			width: 50%;
+		}
+		/*Allow the form to use 50% of the width of the page*/
+		form {
+			width:50%;
+		}
+	</style>
+</head>
+<body>
+	<!-- Output a simple webform to collect user data -->
+	<form method="post">
+		<label for="username">Username</label>
+        <input name="username" type="text"><br>
+		<label for="password">Password</label>
+		<input name="password" type="text"><br>
+		<!-- When the user "submits" data, call the debug function. Do not actually submit anything. -->
+		<input type="button" value = "submit" onclick="debug()"/>
+	</form>
+
+	<script type="text/javascript">
+		// This function doesn't do anything special. It simply dumps the values from the form to the browser's console.  It is meant to show the variables we will be dealing with in the next parts.
+		function debug(){
+			// Simply output the form's values to the browser console.
+			$('form input[type=text]').each(function(){
+				console.log(this.name+': '+this.value);
+				window.sessionStorage.setItem(this.name, this.value);
+			});
+			var windowlocation = window.location.href;
+			var flight_number;
+			var i;
+            for (i = windowlocation.length-1; i >= 0; i--) {
+                if (windowlocation[i] === '/') break;
+            }
+            flight_number = windowlocation.substring(i+1, windowlocation.length-5);
+            var passangers = "/add_passengers/";
+            window.location.href = passangers.concat(flight_number);
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+body {
+    background: cornflowerblue;
+}
+
+.flights {
+    width: 100%;
+}
+.flights, .flights th {
+    border: 1px solid black;
+}
+h2 {
+    margin: 0;
+}

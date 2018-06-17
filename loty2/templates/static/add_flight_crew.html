@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+
+	{% load static %}
+	<script src="{% static "jquery-3.3.1.js" %}"></script>
+    <title>Add flight crew</title>
+</head>
+<body onload="checkLog()">
+    <br>
+    <div class="custom-main-div w3-card-4" style="padding: 10px">
+        <a href="/" style="float:left;font-size: 30px;text-decoration: none;"><i class="fa fa-home"></i>&nbsp</a>
+        <br>
+        <h1 class="custom-header">Przyporządkowanie załóg do lotów</h1>
+        <br>
+        <input type="date" class="form-control" name="date" id="selected_date" style="width:200px;" value="2018-05-01">
+        <button class="get_data">Wyświetl</button>
+
+        <hr>
+        <div>
+            <select id="crews" name="crew_id">
+            </select>
+
+        </div>
+        <div>
+            <p id="msg"></p>
+        </div>
+        <table id="data_table" class="table w3-theme-l4">
+        </table>
+    </div>
+    <script>
+        function checkLog() {
+            if (!(sessionStorage.getItem('username') != null && sessionStorage.getItem('password') != null)){
+                alert("You need to be logged in");
+                setTimeout(location.href = 'login.html' , 500);
+                //show validation message
+            }
+        }
+    </script>
+    <script type="text/javascript">
+    $.ajax({
+        url: "http://127.0.0.1:8000/crews/",
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            for(var i=0;i<data.length;++i) {
+                var option = document.createElement("option");
+                option.text = data[i].captain.name+ " " + data[i].captain.surname;
+                option.value = data[i].id;
+                var select = document.getElementById("crews");
+                select.appendChild(option);
+            }
+        }
+    });
+    function get_data2(flight_number) {
+        console.log(flight_number);
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+
+        $.ajax({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: "http://127.0.0.1:8000/flight_edit_crew/" + flight_number + "/",
+            type: "put",
+            dataType: "json",
+            data: {"crew_id": document.getElementById('crews').value},
+            success: function (data) {
+                console.log(data);
+            }
+        }).done(function(data) {
+            document.getElementById('msg').innerText = data['msg'];
+        });
+
+    }
+
+    $('.get_data').click(function() {
+        $.ajax({
+            url: "http://127.0.0.1:8000/flights/",
+            type: "get",
+            dataType: "json",
+            data: {"date": document.getElementById('selected_date').value},
+            success: function (data) {
+                $("#data_table tr").remove();
+                $('#data_table').append('<tr class="w3-theme-l3"><th>Skąd</th><th>Dokąd</th><th>Początek</th><th>Koniec</th><th>Samolot</th><th>Kapitan załogi</th><th>Zmień</th></tr>');
+                for(var i=0;i<data.length;++i) {
+                    var x = data[i].id;
+                    console.log(data[i]);
+                    console.log(x);
+                    var tr = '<tr>' +
+                        '<td>' + data[i].departure_airport.name + '</td>' +
+                        '<td>' + data[i].arrival_airport.name + '</td>' +
+                        '<td>' + data[i].date_of_departure + '</td>' +
+                        '<td>' + data[i].date_of_arrival + '</td>' +
+                        '<td>' + data[i].plane.name + '</td>' +
+                        '<td>' + data[i].flight_crew.captain.name + ' ' + data[i].flight_crew.captain.surname + '</td>' +
+                        '<td>' +
+                        '<button id = "change" onclick="get_data2(\''+ x + '\')">Zmień</button>' +
+                        '</tr>';
+                    var termin = data[i].date_of_departure;
+                    termin = termin.substring(0, 10);
+                    var termin2 = document.getElementById('selected_date').value;
+                    termin2 = String(termin2);
+                    if (termin === termin2) $('#data_table').append(tr);
+                }
+            }
+        });
+    });
+
+    </script>
+
+</body>
+</html>

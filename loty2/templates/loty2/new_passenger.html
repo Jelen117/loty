@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>New passenger</title>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static "css/new_passenger.css" %}">
+        <meta http-equiv="refresh" content="3; url=/add_passengers/{{ flight_id }}/" />
+    </head>
+    <body>
+        {% if message %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endif %}
+        <div class="redirection">
+            Za moment nastąpi przekierowanie na stronę dodawania pasażerów
+        </div>
+    </body>
+</html>

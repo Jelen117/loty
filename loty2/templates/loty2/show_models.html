@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/show_models.css" %}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h3>LOTY</h3><br>
+    {% for flight in flights %}
+        {{ flight.flight_number }}<span style="padding-left: 2em"></span>
+        {{ flight.pk }}<span style="padding-left: 2em"></span>
+        {{ flight.plane}}<span style="padding-left: 2em"></span>
+        {{ flight.plane.seats }}<span style="padding-left: 2em"></span>
+        {{ flight.arrival_airport }}<span style="padding-left: 2em"></span>
+        {{ flight.date_of_departure }}<span style="padding-left: 2em"></span>
+        {{ flight.id }}<span style="padding-left: 2em"></span>
+        {{ flight.flight_crew.captain.name }}<br>
+    {% endfor %}
+    <br><h3>PASAŻEROWIE</h3><br>
+    {% for passenger in passengers %}
+        {{ passenger.name}} <span style="padding-left:2em"></span> {{ passenger.surname }}<br>
+    {% endfor %}
+
+    <br><h3>BILETY</h3><br>
+    {% for booking in bookings %}
+        {{ booking.passenger}} <span style="padding-left:2em"></span> {{ booking.flight}} <span style="padding-left:2em"></span> {{ booking.number_of_tickets}}<br>
+    {% endfor %}
+    <br><h3>LOTNISKA</h3><br>
+    {% for airport in airports %}
+        {{ airport.city}} <span style="padding-left:2em"></span> {{ airport.name}} <br>
+    {% endfor %}
+    <br><h3>SAMOLOTY</h3><br>
+    {% for plane in planes %}
+        {{ plane.name}} <span style="padding-left:2em"></span> {{ plane.seats}} <br>
+    {% endfor %}
+    <br><h3>ZAŁOGI</h3><br>
+    {% for flight_crew in flight_crews %}
+        {{ flight_crew.members }} <span style="padding-left:2em"></span> {{ flight_crew.captain.name}} <br>
+    {% endfor %}
+    <br><h3>PERSONEL</h3><br>
+    {% for crew_member in crew_members %}
+        {{ crew_member.name}} <br>
+    {% endfor %}
+</body>
+</html>

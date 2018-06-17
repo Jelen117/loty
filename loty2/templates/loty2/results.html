@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/results.css" %}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/results/" method="get">
+        {% csrf_token %}
+        <p><h2>Wybierz loty w wybranym przedziale czasowym</h2><br>
+        Początek przedziału: {{ form.date_from }}<br>
+        Koniec przedziału: {{ form.date_to }} <br>
+        <input type="submit" value="Wybierz" /></p>
+    </form>
+    {% if flights_list %}
+    <table class="flights">
+        <thead>
+            <tr>
+            <th>Loty</th>
+            <th>Miejsca</th>
+            <th>Sprzedano</th>
+            <th>Miejsce odlotu</th>
+            <th>Data odlotu</th>
+            </tr>
+        </thead>
+    {% for flight in flights_list %}
+        <tr>
+            <th><a href="/results/{{ flight.flight_number }}/">{{ flight.flight_number}}</a></th>
+            <th>{{ flight.plane.seats }}</th>
+            <th>{{ flight.tickets_sold }}</th>
+            <th>{{ flight.departure_airport }}</th>
+            <th>{{ flight.date_of_departure }}</th>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No flights are available</p>
+{% endif %}
+</body>
+</html>

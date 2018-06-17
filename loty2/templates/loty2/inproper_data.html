@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Inproper data</title>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static "css/new_passenger.css" %}">
+        <meta http-equiv="refresh" content="3; url=/add_passengers/{{ flight_id }}/" />
+    </head>
+    <body>
+        {% if message %}
+            {{ message }}
+        {% endif %}
+    </body>
+</html>
